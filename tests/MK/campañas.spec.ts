@@ -61,16 +61,16 @@ test.describe("Sub módulo Marketing y Growth", () => {
       await buscarButton.click(); // Hacer clic en Buscar
     });
 
-    // Paso 9: Hacer clic en el enlace "🎁Carro | Haz 6 viajes entre"
-    await test.step("Seleccionar enlace '🎁Carro | Haz 6 viajes entre'", async () => {
-      const carroLink = page.getByRole("link", { name: "🎁Carro | Haz 6 viajes entre" });
+    // Paso 9: Hacer clic en el enlace "🎁Carro | Haz 5 viajes entre"
+    await test.step("Seleccionar enlace '🎁Carro | Haz 5 viajes entre'", async () => {
+      const carroLink = page.getByRole("link", { name: "🎁Carro | Haz 5 viajes entre" });
       await expect(carroLink).toBeVisible({ timeout: 10000 });
       const [newPage] = await Promise.all([
         page.context().waitForEvent('page'), // Esperamos a que se abra una nueva pestaña
         carroLink.click(), // Hacemos click en el enlace
       ]);
       // Validamos que la nueva pestaña tiene la URL esperada
-      await expect(newPage).toHaveURL("https://admin.picap.io/campaigns/67ae1313aeaf82002e5b6828");
+      await expect(newPage).toHaveURL("https://admin.picap.io/campaigns/67c9e1c7847d210024517563");
     });
   });
 });

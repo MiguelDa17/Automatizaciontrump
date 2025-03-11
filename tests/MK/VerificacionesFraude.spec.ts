@@ -53,7 +53,7 @@ test.describe("Sub módulo Marketing y Growth", () => {
 
     // Paso 9: Seleccionar el checkbox correspondiente
     await test.step("Seleccionar checkbox de la campaña", async () => {
-      const checkbox = page.getByRole('row', { name: '🎁Carro | Haz 6 viajes entre' }).getByRole('checkbox');
+      const checkbox = page.getByRole('row', { name: '🎁Carro | Haz 5 viajes entre 1pm a 6pm de S-D y Gana bono extra x $55k | 8 y 9' }).getByRole('checkbox');
       await expect(checkbox).toBeVisible({ timeout: 10000 });
       await checkbox.click(); // Seleccionar el checkbox
     });
