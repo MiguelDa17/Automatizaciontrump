@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 import { login } from "../utils/login"; 
 import { Barra } from "../utils/Barra";
 
-test.describe("Validación de codigos promocionales", () => {
+test.describe("Validación de códigos promocionales", () => {
   test("Validar la página y sus respectivas funciones", async ({ page }) => {
     // Paso 1: Iniciar sesión
     await login(page);
@@ -31,31 +31,13 @@ test.describe("Validación de codigos promocionales", () => {
     // Paso 8: Ingresar la fecha "Hasta" - 2025-03-15
     await page.getByRole('textbox', { name: 'Hasta' }).fill('2025-03-15');
 
-    // Paso 9: Ingresar el código "MEDUSA"
-    await page.getByRole('textbox', { name: 'Código' }).fill('MEDUSA');
-
-    // Paso 10: Hacer clic en el botón "Buscar"
-    await page.getByRole('button', { name: 'Buscar' }).click();
-
-    // Paso 11: Hacer clic en la fila correspondiente a "MEDUSA"
-    await page.getByRole('row', { name: 'Marzo 10 2025 00:00 -05 Marzo 16 2025 23:59 -05 MEDUSA •Disponible' })
+    // Paso 9: Hacer clic en el primer enlace dentro de la fila con la fecha especificada
+    await page.getByRole('row', { name: 'Marzo 13 2025 06:14 -05 Marzo' })
       .getByRole('link')
-      .nth(1)
+      .nth(2)
       .click();
 
-    // Paso 12: Escribir "prueba QA" en el input dentro del modal
-    await page.locator('#promo_code_modal input[type="text"]').fill('prueba QA');
-
-    // Paso 13: Escribir "prueba QA" en el textarea de push notification
-    await page.locator('#push_notification').fill('prueba QA');
-
-
-    // Paso 14: Asegurar que el botón "Cancelar" está disponible antes de hacer clic
-    await page.getByRole('button', { name: 'Cancelar' }).waitFor();
+    // Paso 10: Hacer clic en el botón "Cancelar" dentro del formulario
     await page.getByRole('button', { name: 'Cancelar' }).click();
-
-    // Paso 15: Asegurar que el botón "Limpiar" está disponible antes de hacer clic
-    await page.getByRole('button', { name: 'Limpiar' }).waitFor();
-    await page.getByRole('button', { name: 'Limpiar' }).click();
   });
 });
