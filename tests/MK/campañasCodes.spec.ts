@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { login } from "../utils/login"; 
-import { Barra } from "../utils/temp";
+import { Barra } from "../utils/Barra";
 
 test.describe("Validación de códigos promocionales", () => {
   test("Validar la página y sus respectivas funciones", async ({ page }) => {

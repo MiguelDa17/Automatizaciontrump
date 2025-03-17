@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { login } from "../utils/login";
-import { Barra } from "../utils/temp";
+import { Barra } from "../utils/Barra";
 
 test.describe("Sub módulo Marketing y Growth", () => {
   test("Validar filtros en la página de Campañas", async ({ page }) => {
