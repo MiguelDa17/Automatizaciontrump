@@ -18,6 +18,7 @@ export async function Barra(page: Page) {
   // Verificamos si el menú está visible, y si no, hacemos un segundo clic
   const menuVisible = page.locator(".sidenav-class"); // Ajusta la clase según sea necesario
   if (!(await menuVisible.isVisible())) {
+    await menuButton.waitFor({ state: 'visible', timeout: 5000 }); // Espera antes de hacer clic
     await menuButton.click();
-  }
+}
 }
