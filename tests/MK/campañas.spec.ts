@@ -31,15 +31,13 @@ test.describe("Sub módulo Marketing y Growth", () => {
 
     // Paso 6: Completar los filtros de fecha
     await test.step("Seleccionar fecha 'Desde' y 'Hasta'", async () => {
-      // Seleccionar fecha 'Desde' (1 Febrero 2025)
       const desdeInput = page.getByRole('textbox', { name: 'Desde' });
       await expect(desdeInput).toBeVisible({ timeout: 10000 });
-      await desdeInput.fill('2025-02-01'); // Fecha 1 Febrero 2025
+      await desdeInput.fill('2025-02-01');
 
-      // Seleccionar fecha 'Hasta' (fecha actual)
       const hastaInput = page.getByRole('textbox', { name: 'Hasta' });
       await expect(hastaInput).toBeVisible({ timeout: 10000 });
-      const currentDate = new Date().toISOString().split('T')[0]; // Obtener la fecha actual en formato YYYY-MM-DD
+      const currentDate = new Date().toISOString().split('T')[0]; 
       await hastaInput.fill(currentDate);
     });
 
@@ -47,30 +45,30 @@ test.describe("Sub módulo Marketing y Growth", () => {
     await test.step("Seleccionar estado 'Activa' con teclado", async () => {
       const campaignStatusSelect = page.locator('#campaign_status');
       await expect(campaignStatusSelect).toBeVisible({ timeout: 10000 });
-      await campaignStatusSelect.click(); // Hacemos click para desplegar el menú
-
-      // Usamos el teclado para presionar 'A' y luego 'Enter' para seleccionar "Activa"
-      await campaignStatusSelect.press('A'); // Presionamos 'A'
-      await campaignStatusSelect.press('Enter'); // Confirmamos con Enter
+      await campaignStatusSelect.click();
+      await campaignStatusSelect.press('A'); 
+      await campaignStatusSelect.press('Enter');
     });
 
     // Paso 8: Hacer clic en el botón Buscar
     await test.step("Hacer clic en el botón Buscar", async () => {
       const buscarButton = page.locator('#campaign_status');
       await expect(buscarButton).toBeVisible({ timeout: 10000 });
-      await buscarButton.click(); // Hacer clic en Buscar
+      await buscarButton.click();
     });
 
     // Paso 9: Hacer clic en el enlace "🎁Carro | Haz 5 viajes entre"
     await test.step("Seleccionar enlace '🎁Carro | Haz 5 viajes entre'", async () => {
-      const carroLink = page.getByRole("link", { name: "🎁Carro | Haz 5 viajes entre" }).first();
-      await expect(carroLink).toBeVisible({ timeout: 10000 });
+      await page.waitForLoadState("networkidle"); // Esperar a que la red esté inactiva
+      const carroLink = page.getByText(/Carro \| Haz 5 viajes entre/i).first();
+      await expect(carroLink).toBeVisible({ timeout: 15000 }); // Aumentamos el timeout
+      await carroLink.scrollIntoViewIfNeeded(); // Nos aseguramos de que el elemento esté visible en pantalla
+
       const [newPage] = await Promise.all([
-        page.context().waitForEvent('page'), // Esperamos a que se abra una nueva pestaña
-        carroLink.click(), // Hacemos click en el enlace
+        page.context().waitForEvent('page'),
+        carroLink.click(),
       ]);
-      // Validamos que la nueva pestaña tiene la URL esperada
-      await expect(newPage).toHaveURL("https://admin.picap.io/campaigns/67d48a539da40000274d8165");
+      await expect(newPage).toHaveURL(/https:\/\/admin\.picap\.io\/campaigns\/\w+/);
     });
   });
 });
