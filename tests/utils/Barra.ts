@@ -1,45 +1,40 @@
 import { Page, expect } from "@playwright/test";
 
 export async function Barra(page: Page) {
-  const menuButton = page.locator("#ham-menu"); // Botón del menú
-  const menuVisible = page.locator("#mysidenav"); // Menú lateral
+  const menuButton = page.locator("#ham-menu");
+  const menuVisible = page.locator("#mysidenav");
 
-  // Obtener y mostrar la resolución de pantalla en GitHub Actions
-  const resolution = await page.evaluate(() => ({
+  console.log("🖥️ Resolución actual:", await page.evaluate(() => ({
     width: window.innerWidth,
     height: window.innerHeight
-  }));
-  console.log(`🖥️ Resolución actual: ${resolution.width}x${resolution.height}`);
+  })));
 
   console.log("🔍 Verificando si el botón del menú existe...");
-  await menuButton.waitFor({ state: "attached", timeout: 10000 });
+  await expect(menuButton).toBeAttached({ timeout: 10000 });
+
+  console.log("📏 Verificando si el botón está visible...");
+  await expect(menuButton).toBeVisible({ timeout: 5000 });
 
   console.log("🖱️ Moviendo cursor hasta el botón del menú...");
   await menuButton.scrollIntoViewIfNeeded();
   await menuButton.hover();
 
-  console.log("✅ Botón del menú encontrado. Haciendo clic...");
+  console.log("✅ Botón del menú encontrado. Probando si responde al clic...");
   await menuButton.click();
-  await page.waitForTimeout(1500); // Espera adicional para evitar interferencias
 
-  console.log("⏳ Verificando si el menú se abrió...");
-  const menuAppeared = await page.locator("#mysidenav").waitFor({ state: "visible", timeout: 5000 }).catch(() => false);
-
-  if (!menuAppeared) {
-    console.log("⚠️ Menú no visible. Intentando un segundo clic con 'force: true'...");
-    await menuButton.hover();
+  console.log("⏳ Esperando a que el menú se abra...");
+  try {
+    await menuVisible.waitFor({ state: "visible", timeout: 7000 });
+    console.log("✅ Menú lateral abierto correctamente.");
+  } catch (error) {
+    console.log("⚠️ Intentando forzar la apertura con otro clic...");
     await menuButton.click({ force: true });
-    await page.waitForTimeout(1500);
+
+    try {
+      await menuVisible.waitFor({ state: "visible", timeout: 5000 });
+      console.log("✅ Menú lateral abierto tras reintentar.");
+    } catch (error) {
+      throw new Error("❌ El menú no se abrió después de varios intentos.");
+    }
   }
-
-  console.log("✅ Verificando si el menú lateral sigue visible...");
-  await expect(menuVisible).toBeVisible({ timeout: 5000 });
-
-  console.log("🔒 Asegurando que el menú no se cierre inmediatamente...");
-  await page.waitForTimeout(2000);
-  if (!(await menuVisible.isVisible())) {
-    throw new Error("❌ El menú se cerró inesperadamente.");
-  }
-
-  console.log("✅ Menú lateral abierto correctamente.");
 }
