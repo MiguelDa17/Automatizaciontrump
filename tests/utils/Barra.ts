@@ -1,36 +1,26 @@
 import { Page, expect } from "@playwright/test";
 
-/**
- * Abre el menú lateral si no está visible.
- * @param page - Instancia de Playwright Page
- */
 export async function Barra(page: Page) {
-  const menuButton = page.locator(".bg-pic-purple-light > .cursor-pointer");
-  const menuVisible = page.locator(".sidenav-class"); // Ajusta la clase del menú
+  const menuButton = page.locator("#ham-menu"); // Nuevo selector basado en el ID
+  const menuVisible = page.locator(".sidenav-class"); // Ajustar si no es el correcto
 
   console.log("🔍 Verificando visibilidad del botón del menú...");
-
-  // Esperar a que el botón del menú sea visible antes de hacer clic
-  await menuButton.waitFor({ state: "attached", timeout: 15000 }).catch(() => {
-    throw new Error("❌ El botón del menú no está presente en la página.");
-  });
+  await menuButton.waitFor({ state: "attached", timeout: 15000 });
 
   console.log("✅ Botón del menú encontrado.");
-
-  // Asegurar que el botón esté en la vista antes de hacer clic
   await menuButton.scrollIntoViewIfNeeded();
-
+  await menuButton.hover(); // Hover antes del clic
   console.log("🖱️ Haciendo clic en el botón del menú...");
   await menuButton.click();
-  await page.waitForTimeout(2000); // Esperar animación
 
-  console.log("🔍 Verificando si el menú se abrió...");
+  console.log("⏳ Esperando a que el menú aparezca...");
+  await menuVisible.waitFor({ state: "attached", timeout: 5000 }).catch(() => {
+    console.log("⚠️ El menú no se cargó en el DOM. Verifica el selector.");
+  });
+
   if (!(await menuVisible.isVisible())) {
     console.log("⚠️ Menú no visible. Intentando nuevamente...");
-    await menuButton.waitFor({ state: "visible", timeout: 5000 }).catch(() => {
-      throw new Error("❌ El botón del menú desapareció antes de hacer clic.");
-    });
-
+    await page.waitForTimeout(1000);
     await menuButton.click();
   }
 
