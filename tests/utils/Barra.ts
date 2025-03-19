@@ -4,6 +4,13 @@ export async function Barra(page: Page) {
   const menuButton = page.locator("#ham-menu"); // Botón del menú
   const menuVisible = page.locator("#mysidenav"); // Menú lateral
 
+  // Obtener y mostrar la resolución de pantalla en GitHub Actions
+  const resolution = await page.evaluate(() => ({
+    width: window.innerWidth,
+    height: window.innerHeight
+  }));
+  console.log(`🖥️ Resolución actual: ${resolution.width}x${resolution.height}`);
+
   console.log("🔍 Verificando si el botón del menú existe...");
   await menuButton.waitFor({ state: "attached", timeout: 10000 });
 
