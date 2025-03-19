@@ -1,8 +1,8 @@
 import { Page, expect } from "@playwright/test";
 
 export async function Barra(page: Page) {
-  const menuButton = page.locator("#ham-menu"); // Nuevo selector basado en el ID
-  const menuVisible = page.locator(".sidenav-class"); // Ajustar si no es el correcto
+  const menuButton = page.locator(".cursor-pointer"); // Nuevo selector basado en la inspección
+  const menuVisible = page.locator("#mysidenav"); // Ajustar si no es el correcto
 
   console.log("🔍 Verificando visibilidad del botón del menú...");
   await menuButton.waitFor({ state: "attached", timeout: 15000 });
