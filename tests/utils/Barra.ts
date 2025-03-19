@@ -20,16 +20,16 @@ export async function Barra(page: Page) {
 
   console.log("✅ Botón del menú encontrado. Haciendo clic...");
   await menuButton.click();
-  await page.waitForTimeout(1000); // Asegurar que no hay animaciones interrumpiendo
+  await page.waitForTimeout(1500); // Espera adicional para evitar interferencias
 
   console.log("⏳ Verificando si el menú se abrió...");
-  const menuAppeared = await menuVisible.waitFor({ state: "visible", timeout: 5000 }).catch(() => false);
+  const menuAppeared = await page.locator("#mysidenav").waitFor({ state: "visible", timeout: 5000 }).catch(() => false);
 
   if (!menuAppeared) {
     console.log("⚠️ Menú no visible. Intentando un segundo clic con 'force: true'...");
     await menuButton.hover();
     await menuButton.click({ force: true });
-    await page.waitForTimeout(1000);
+    await page.waitForTimeout(1500);
   }
 
   console.log("✅ Verificando si el menú lateral sigue visible...");
