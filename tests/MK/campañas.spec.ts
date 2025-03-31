@@ -59,16 +59,18 @@ test.describe("Sub módulo Marketing y Growth", () => {
 
     // Paso 9: Hacer clic en el enlace "🎁Carro | Haz 5 viajes entre"
     await test.step("Seleccionar enlace '🎁Carro | Haz 5 viajes entre'", async () => {
-      await page.waitForLoadState("networkidle");
-      await page.waitForTimeout(2000); // Pequeño retraso para estabilidad
+      await page.waitForLoadState("networkidle"); // Esperar carga de la página
+      await page.waitForTimeout(2000); // Pequeño retraso adicional
       
-      const carroLink = page.locator("text=Carro | Haz 5 viajes entre").first();
-      await carroLink.waitFor({ state: "visible", timeout: 20000 });
+      const carroLink = page.locator("text=/Carro.*Haz 5 viajes entre/").first();
+      await expect(carroLink).toHaveCount(1, { timeout: 5000 }); // Validar que existe antes
       await carroLink.scrollIntoViewIfNeeded();
+      await page.waitForTimeout(1000); // Esperar antes de interactuar
+      await carroLink.waitFor({ state: "visible", timeout: 20000 });
       
       const [newPage] = await Promise.all([
         page.context().waitForEvent('page'),
-        carroLink.click(),
+        carroLink.click({ force: true }),
       ]);
       await expect(newPage).toHaveURL(/https:\/\/admin\.picap\.io\/campaigns\/\w+/);
     });

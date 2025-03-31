@@ -1,29 +1,15 @@
 import { test, expect } from "@playwright/test";
-import { login } from "../utils/login"; // Importamos la función de login
+import { login } from "../utils/login"; // 
+import { Barra } from "../utils/Barra";
 
 test.describe("Navegación al módulo de Todos los Servicios", () => {
   test("Acceder a la sección de Todos los Servicios", async ({ page }) => {
     // Paso 1: Iniciar sesión
     await login(page);
 
-    // Paso 2: Asegurar que el menú lateral está visible antes de hacer clic
-    await test.step("Abrir menú lateral", async () => {
-      const menuButton = page.locator(".bg-pic-purple-light > .cursor-pointer");
-      await expect(menuButton).toBeVisible({ timeout: 10000 }); // Espera hasta 10s
-      await menuButton.scrollIntoViewIfNeeded();
-      
-      // Primer clic
-      await menuButton.click();
+   // Paso 2: Abrir el menú lateral
+      await Barra(page);
 
-      // Esperamos un poco para dar tiempo a la animación
-      await page.waitForTimeout(1500); // Puedes ajustar el tiempo
-
-      // Verificamos si el menú está visible, y si no, forzamos el segundo clic
-      const menuVisible = page.locator('.sidenav-class'); // Reemplaza '.sidenav-class' con la clase que indica que el menú está abierto
-      if (!(await menuVisible.isVisible())) {
-        await menuButton.click(); // Segundo clic si no está visible
-      }
-    });
 
     // Paso 3: Esperar a que "Servicios" sea interactuable y hacer clic
     await test.step("Seleccionar módulo Servicios", async () => {
