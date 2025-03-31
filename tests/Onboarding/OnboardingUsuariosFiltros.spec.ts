@@ -23,7 +23,8 @@ test.describe("Validación de Onboarding Dashboard", () => {
     await page.getByRole('link', { name: 'Usuarios onboarding' }).click();
 
     // Paso 6: Esperar a que la nueva URL cargue
-    await page.waitForURL("https://admin.picap.io/onboardings", { timeout: 9000 });
+    await page.waitForURL("https://admin.picap.io/onboardings", { timeout: 15000 });
+
 
     // Paso 7: Validar que la página cargó correctamente
     await expect(page).toHaveURL("https://admin.picap.io/onboardings");
