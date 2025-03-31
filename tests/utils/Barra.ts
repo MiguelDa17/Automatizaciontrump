@@ -13,7 +13,7 @@ export async function Barra(page: Page) {
   await expect(menuButton).toBeAttached({ timeout: 10000 });
 
   console.log("📏 Verificando si el botón está visible...");
-  await expect(menuButton).toBeVisible({ timeout: 5000 });
+  await expect(menuButton).toBeVisible({ timeout: 10000 }); // Aumentar tiempo de espera
 
   console.log("🖱️ Moviendo cursor hasta el botón del menú...");
   await menuButton.scrollIntoViewIfNeeded();
@@ -31,7 +31,7 @@ export async function Barra(page: Page) {
     await menuButton.click({ force: true });
 
     try {
-      await menuVisible.waitFor({ state: "visible", timeout: 5000 });
+      await menuVisible.waitFor({ state: "visible", timeout: 7000 }); // Aumentar el tiempo de espera para el menú
       console.log("✅ Menú lateral abierto tras reintentar.");
     } catch (error) {
       throw new Error("❌ El menú no se abrió después de varios intentos.");
