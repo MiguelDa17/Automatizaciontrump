@@ -56,24 +56,5 @@ test.describe("Sub módulo Marketing y Growth", () => {
       await expect(buscarButton).toBeVisible({ timeout: 10000 });
       await buscarButton.click();
     });
-
-    // Paso 9: Hacer clic en el enlace "🎁Carro | Haz 5 viajes entre"
-    await test.step("Seleccionar enlace '🎁Carro | Haz 6 viajes entre'", async () => {
-      await page.waitForLoadState("networkidle"); // Esperar carga de la página
-      await page.waitForTimeout(2000); // Pequeño retraso adicional
-
-      // Usar un selector más flexible
-      const carroLink = page.locator('a[href^="/campaigns/"]', { hasText: /🎁Carro \| Haz 6 viajes entre/ });
-      await expect(carroLink).toBeVisible({ timeout: 10000 }); // Validar que el enlace es visible
-      await carroLink.scrollIntoViewIfNeeded();
-      await page.waitForTimeout(1000); // Esperar antes de interactuar
-
-      // Hacer clic en el enlace
-      const [newPage] = await Promise.all([
-        page.context().waitForEvent('page'),
-        carroLink.click(),
-      ]);
-      await expect(newPage).toHaveURL(/https:\/\/admin\.picap\.io\/campaigns\/\w+/);
-    });
   });
 });

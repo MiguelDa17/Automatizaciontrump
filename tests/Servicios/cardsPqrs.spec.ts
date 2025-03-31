@@ -8,9 +8,7 @@ test.describe("Mover card de Cerrado a Reconsideración", () => {
     await login(page);
 
     // Paso 2: Abrir el menú lateral
-    await page.locator('#ham-menu').click();
     await Barra(page);
-    await page.getByText('App', { exact: true }).click();
 
     // Paso 3: Seleccionar el módulo de "Servicios"
     await test.step("Seleccionar módulo Servicios", async () => {
