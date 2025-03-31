@@ -34,10 +34,10 @@ test.describe("Sub módulo Marketing y Growth", () => {
       const desdeInput = page.getByRole('textbox', { name: 'Desde' });
       await expect(desdeInput).toBeVisible({ timeout: 10000 });
       await desdeInput.fill('2025-02-01');
-
+      
       const hastaInput = page.getByRole('textbox', { name: 'Hasta' });
       await expect(hastaInput).toBeVisible({ timeout: 10000 });
-      const currentDate = new Date().toISOString().split('T')[0]; 
+      const currentDate = new Date().toISOString().split('T')[0];
       await hastaInput.fill(currentDate);
     });
 
@@ -59,11 +59,13 @@ test.describe("Sub módulo Marketing y Growth", () => {
 
     // Paso 9: Hacer clic en el enlace "🎁Carro | Haz 5 viajes entre"
     await test.step("Seleccionar enlace '🎁Carro | Haz 5 viajes entre'", async () => {
-      await page.waitForLoadState("networkidle"); // Esperar a que la red esté inactiva
-      const carroLink = page.getByText(/Carro \| Haz 5 viajes entre/i).first();
-      await expect(carroLink).toBeVisible({ timeout: 15000 }); // Aumentamos el timeout
-      await carroLink.scrollIntoViewIfNeeded(); // Nos aseguramos de que el elemento esté visible en pantalla
-
+      await page.waitForLoadState("networkidle");
+      await page.waitForTimeout(2000); // Pequeño retraso para estabilidad
+      
+      const carroLink = page.locator("text=Carro | Haz 5 viajes entre").first();
+      await carroLink.waitFor({ state: "visible", timeout: 20000 });
+      await carroLink.scrollIntoViewIfNeeded();
+      
       const [newPage] = await Promise.all([
         page.context().waitForEvent('page'),
         carroLink.click(),
