@@ -7,6 +7,7 @@ on:
   pull_request:
     branches:
       - main
+  workflow_dispatch:  # Permite ejecución manual
 
 jobs:
   test:
@@ -28,4 +29,23 @@ jobs:
         run: npx playwright install --with-deps
 
       - name: 🚀 Ejecutar pruebas de Playwright
-        run: npx playwright test
+        id: test
+        run: |
+          npx playwright test | tee playwright-output.txt
+          if grep -q "failed" playwright-output.txt; then
+            echo "TEST_STATUS=FAILED" >> $GITHUB_ENV
+          else
+            echo "TEST_STATUS=SUCCESS" >> $GITHUB_ENV
+          fi
+
+      - name: 📢 Notificar resultados en Google Chat
+        run: |
+          if [ "$TEST_STATUS" = "SUCCESS" ]; then
+            STATUS_MESSAGE="✅ Todas las pruebas pasaron exitosamente."
+          else
+            STATUS_MESSAGE="❌ Algunas pruebas fallaron. Revisa los logs."
+          fi
+
+          curl -X POST -H 'Content-Type: application/json' \
+          -d "{\"text\": \"$STATUS_MESSAGE\"}" \
+          "https://chat.googleapis.com/v1/spaces/AAAAOzKWJJQ/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=YFmBV6rljIYSHXdLP2ozpebmaaYRbJFCA-8HezJrGPs"
