@@ -61,9 +61,9 @@ test.describe("Sub módulo Marketing y Growth", () => {
     await test.step("Seleccionar enlace '🎁Carro | Haz 6 viajes entre'", async () => {
       await page.waitForLoadState("networkidle"); // Esperar carga de la página
       await page.waitForTimeout(2000); // Pequeño retraso adicional
-      
-      // Usar getByRole para el enlace
-      const carroLink = page.getByRole("link", { name: "🎁Carro | Haz 6 viajes entre" });
+
+      // Usar un selector más flexible
+      const carroLink = page.locator('a[href^="/campaigns/"]', { hasText: /🎁Carro \| Haz 6 viajes entre/ });
       await expect(carroLink).toBeVisible({ timeout: 10000 }); // Validar que el enlace es visible
       await carroLink.scrollIntoViewIfNeeded();
       await page.waitForTimeout(1000); // Esperar antes de interactuar
